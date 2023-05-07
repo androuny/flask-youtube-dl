@@ -9,6 +9,10 @@ git clone https://github.com/androuny/flask-youtube-dl.git
 ```
 
 ```
+cd flask-youtube-dl
+```
+
+```
 pip install -r requirements.txt
 ```
 
