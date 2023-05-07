@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>youtube-dl</title>
+    <style>
+        .main {
+            background-color: gray;
+            font-family: consolas;
+        }
+        .content{
+            margin-top: 15%;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+        button {
+            background-color: green;
+            padding: 10px;
+            padding-left: 20px;
+            padding-right: 20px;
+            border-radius: 8px;
+            border-color: green;
+        }
+        input {
+            min-width: 400px;
+            background-color: #b5b5b5;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px; /* set the height to whatever you want */
+            text-align: center; /* center the text within the footer */
+            padding: 10px; /* add some padding for spacing */
+        }
+    </style>
+
+</head>
+<body class="main">
+
+    <div class="content">
+        <h1>welcome to youtube-download</h1>
+
+        <form id="myForm">
+            <input type="text" placeholder="enter video url here..." id="video_link">
+            <button type="submit" onclick="handle_video()">SEND</button>
+        </form>
+
+        <p>this shit scuffed af bet kip vajadzetu stradat 😀👍👍</p>
+        <p>Powered by <a href="https://flask.palletsprojects.com/en/2.3.x/#">Flask</a> and <a href="https://github.com/yt-dlp/yt-dlp">yt_dlp</a></p>
+
+    </div>
+
+
+    <footer>
+        © Andris Zalāns, 2023
+    </footer>
+
+    <script>
+
+
+        let form = document.getElementById("myForm");
+        form.addEventListener('submit', handle_video);
+
+        function handle_video() {
+            event.preventDefault();
+            let video_url = document.getElementById("video_link").value;
+            console.log(video_url);
+
+            fetch("http://127.0.0.1:5000/download", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({'video_url': video_url})
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    throw new Error('HTTP error ' + response.status);
+                }
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'video.mp4';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error(error))};
+    </script>
+
+</body>
+</html>
