@@ -13,6 +13,8 @@ ydl_opts = {
     'forcefilename': True,
     'merge_output_format': 'mp4',
     'outtmpl' : 'video.mp4',
+    'concurrent-fragments' : 50, # if your speed is very slow, try increasing this number
+    'user-agent' : "Mozilla/5.1 (Windows NT 10.0; Win64; x64) AppleWebKit/123.42 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/875.12",
 }
 
 app = Flask(__name__)
