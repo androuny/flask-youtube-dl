@@ -53,7 +53,7 @@
             <button type="submit" onclick="handle_video()">SEND</button>
         </form>
 
-        <p>this shit scuffed af bet kip vajadzetu stradat 😀👍👍</p>
+        <p>projekts vēl nav pilnībā pabeigts, var gadīties kļūdas😀👍👍</p>
         <p>Powered by <a href="https://flask.palletsprojects.com/en/2.3.x/#">Flask</a> and <a href="https://github.com/yt-dlp/yt-dlp">yt_dlp</a></p>
 
     </div>
@@ -66,29 +66,32 @@
     <script>
 
 
+        // uzliek handle_video(), tā lai tā tiek izsaukta uz form submition.
         let form = document.getElementById("myForm");
         form.addEventListener('submit', handle_video);
 
+
+        // handle_video() funkcija paņem video_link, aizsūta flask serverim API POST request, serveris nolādē video un atsūta atpakaļ. PS - Es gribēju video saglabāt un aizsūtit JSON responsā iekš base64 stringa, bet antivīrusiem šī ideja nepatīk :(
         function handle_video() {
             event.preventDefault();
             let video_url = document.getElementById("video_link").value;
             console.log(video_url);
 
-            fetch("http://127.0.0.1:5000/download", {
+            fetch("http://127.0.0.1:5000/download", { // aizsūtam POST requestu uz serveri
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({'video_url': video_url})
             })
-            .then(response => {
+            .then(response => { // handle response
                 if (response.ok) {
                     return response.blob();
                 } else {
                     throw new Error('HTTP error ' + response.status);
                 }
             })
-            .then(blob => {
+            .then(blob => { // lejupielādē iegūto video failu kā video.mp4
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
@@ -98,7 +101,7 @@
                 a.remove();
                 window.URL.revokeObjectURL(url);
             })
-            .catch(error => console.error(error))};
+            .catch(error => console.error(error))}; // izprintē kļūdu consolē.
     </script>
 
 </body>
